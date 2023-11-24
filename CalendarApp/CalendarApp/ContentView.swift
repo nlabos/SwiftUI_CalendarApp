@@ -33,9 +33,6 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
                 ToolbarItem {
                     Button(action: { showingDiaryEntrySheet.toggle() }) {
                         Label("Add Item", systemImage: "plus")
