@@ -5,8 +5,8 @@
 //  Created by 高橋直希 on 2023/11/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
@@ -24,7 +24,7 @@ struct ContentView: View {
                     .onChange(of: selectedDate) { _ in
                         // Handle change in date selection
                     }
-                
+
                 List {
                     ForEach(filteredItems(for: selectedDate)) { item in
                         VStack(alignment: .leading) {
@@ -65,14 +65,14 @@ struct ContentView: View {
             Text("Select an item")
         }
     }
-    
+
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: selectedDate, diaryText: diaryText)
             modelContext.insert(newItem)
         }
     }
-    
+
     private func updateItem(_ item: Item) {
         withAnimation {
             item.diaryText = diaryText
@@ -87,7 +87,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private func filteredItems(for date: Date) -> [Item] {
         return items.filter { Calendar.current.isDate($0.timestamp, inSameDayAs: date) }
     }
@@ -97,13 +97,22 @@ struct DiaryEntryView: View {
     @Binding var diaryText: String
     @Binding var item: Item? // Optional Item for editing
     var onSave: () -> Void
-
     var body: some View {
         NavigationView {
             VStack {
-                TextEditor(text: $diaryText)
-                    .padding()
+                ZStack(alignment: .topLeading) {
+                    TextEditor(text: $diaryText)
+                        .padding()
+                        .border(Color.blue, width: 1)
+                        .cornerRadius(3)
+                    if diaryText.isEmpty {
+                        Text("ここに入力")
+                            .foregroundColor(.gray)
+                            .padding()
+                    }
+                }
             }
+            .padding()
             .navigationTitle(item == nil ? "New Diary Entry" : "Edit Diary Entry")
             .navigationBarItems(trailing: Button("Save") {
                 onSave()
@@ -111,7 +120,6 @@ struct DiaryEntryView: View {
         }
     }
 }
-
 
 #Preview {
     ContentView()
