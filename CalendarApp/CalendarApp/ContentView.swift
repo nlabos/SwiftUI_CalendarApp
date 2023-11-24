@@ -10,8 +10,10 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var selectedDate = Date() // カレンダーで選択している日付を保持する変数
+    @State private var selectedDate = Date()
     @Query private var items: [Item]
+    @State private var showingDiaryEntrySheet = false // To show modal sheet for diary entry
+    @State private var diaryText = "" // To capture user's diary text input
     
     var body: some View {
         NavigationSplitView {
@@ -23,7 +25,11 @@ struct ContentView: View {
                     }
                 
                 List(filteredItems(for: selectedDate)) { item in
-                    Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                    VStack{
+                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text(item.diaryText)
+                    }
+                    
                 }
             }
             .toolbar {
@@ -31,9 +37,16 @@ struct ContentView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: { showingDiaryEntrySheet.toggle() }) {
                         Label("Add Item", systemImage: "plus")
                     }
+                }
+            }
+            .sheet(isPresented: $showingDiaryEntrySheet) {
+                // 日記の文章を記録するためのView：あとで定義します
+                DiaryEntryView(diaryText: $diaryText) {
+                    addItem()
+                    showingDiaryEntrySheet.toggle()
                 }
             }
         } detail: {
@@ -43,10 +56,12 @@ struct ContentView: View {
     
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: selectedDate)
+            let newItem = Item(timestamp: selectedDate, diaryText: diaryText)
             modelContext.insert(newItem)
+            diaryText = "" // Reset the diary text for next entry
         }
     }
+    
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
@@ -59,6 +74,25 @@ struct ContentView: View {
     private func filteredItems(for date: Date) -> [Item] {
         // Filter the `items` array to return only those items that match the selected date
         return items.filter { Calendar.current.isDate($0.timestamp, inSameDayAs: date) }
+    }
+}
+
+
+struct DiaryEntryView: View {
+    @Binding var diaryText: String
+    var onSave: () -> Void
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                TextEditor(text: $diaryText)
+                    .padding()
+            }
+            .navigationTitle("Diary Entry")
+            .navigationBarItems(trailing: Button("Save") {
+                onSave()
+            })
+        }
     }
 }
 
