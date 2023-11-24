@@ -9,9 +9,9 @@ SwiftUI のカレンダーアプリ
 - カレンダーアプリ
 - 各日付に日記を記録できる
 
-![アプリ カレンダー画面](Pictures/スクリーンショット 2023-11-24 18.04.50.png)
+![アプリ カレンダー画面](/Pictures/calendarView.png)
 
-![アプリ 日記入力画面](Pictures/Simulator Screenshot - iPhone 15 Pro - 2023-11-24 at 19.06.43.png)
+![アプリ 日記入力画面](/Pictures/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202023-11-24%20at%2019.06.43.png)
 
 ### 学習したいこと
 
@@ -46,5 +46,3 @@ SwiftUI のカレンダーアプリ
 ## 利用するパッケージ
 
 なし
-
-## 完成予定
