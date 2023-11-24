@@ -24,12 +24,14 @@ struct ContentView: View {
                         // Handle change in date selection
                     }
                 
-                List(filteredItems(for: selectedDate)) { item in
-                    VStack{
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                        Text(item.diaryText)
+                List {
+                    ForEach(filteredItems(for: selectedDate)) { item in
+                        VStack(alignment: .leading) {
+                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                            Text(item.diaryText)
+                        }
                     }
-                    
+                    .onDelete(perform: deleteItems)
                 }
             }
             .toolbar {
