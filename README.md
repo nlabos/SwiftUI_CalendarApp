@@ -43,6 +43,10 @@ SwiftUI のカレンダーアプリ
 9. データの更新機能を追加
 10. 日記入力画面の UI を洗練させる（挑戦問題）
 
-## 利用するパッケージ
+## Swift Packege Manager
 
-なし
+- なし
+
+## Framework
+
+- SwiftaData
